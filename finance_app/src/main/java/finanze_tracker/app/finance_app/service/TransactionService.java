@@ -1,17 +1,18 @@
 package finanze_tracker.app.finance_app.service;
 
 import java.util.List;
-import java.util.Locale.Category;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import finanze_tracker.app.finance_app.dto.TransactionRequest;
+import finanze_tracker.app.finance_app.exception.ResourceNotFoundException;
 import finanze_tracker.app.finance_app.model.Account;
+import finanze_tracker.app.finance_app.model.Category;
 import finanze_tracker.app.finance_app.model.Transaction;
 import finanze_tracker.app.finance_app.repository.AccountRepository;
 import finanze_tracker.app.finance_app.repository.CategoryRepository;
 import finanze_tracker.app.finance_app.repository.TransactionRepository;
-import jakarta.transaction.Transactional;
 
 @Service
 public class TransactionService {
@@ -35,8 +36,7 @@ public class TransactionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Account not found with id: " + request.accountId()));
 
         Category category = categoryRepository.findById(request.categoryId())
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("Category not found with id: " + request.categoryId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + request.categoryId()));
 
         Transaction transaction = new Transaction();
         transaction.setAccount(account);
@@ -48,15 +48,16 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public List<Transaction> getAllTransaction() {
+    public List<Transaction> getAllTransactions() {
         return transactionRepository.findAll();
     }
 
-    public Transaction getAllTransactionById(Long id) {
+    public Transaction getTransactionById(Long id) {
         return transactionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction not found with id: " + id));
     }
 
+    @Transactional
     public void deleteTransaction(Long id) {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction not found with id: " + id));

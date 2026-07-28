@@ -1,10 +1,12 @@
 package finanze_tracker.app.finance_app.dto;
 
+import java.math.BigDecimal;
+
 public record BudgetStatusResponse(
-        long categoryId,
+        Long categoryId,
         String categoryName,
-        double limitAmount,
-        double actualSpend,
+        BigDecimal limitAmount,
+        BigDecimal actualSpend,
         boolean isOverBudget) {
 
 }
