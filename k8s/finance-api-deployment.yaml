@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: finance-api
-          image: finance-api:local
+          image: finance-api:v2
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
